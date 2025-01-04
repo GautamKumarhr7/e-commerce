@@ -6,9 +6,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node dist/index.js",
     "dev": "NODE_ENV='dev' nodemon src/index.ts",
-    "make:migration":"drizzle-kit generate:pg",
-    "migrate":"ts-node ./src/db/migration.ts",
-    "seed":"ts-node ./src/db/seed.ts"
+    "make:migration": "drizzle-kit generate:pg",
+    "migrate": "ts-node ./src/db/migrations.ts",
+    "seed": "ts-node ./src/db/seed.ts"
   },
   "keywords": [],
   "author": "",
