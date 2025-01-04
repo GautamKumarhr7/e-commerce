@@ -2,7 +2,6 @@ import bcrypt from "bcrypt";
 import { db } from "../db/connection";
 import { users } from "../db/schema";
 import { Request, Response } from "express";
-import { timestamp } from "drizzle-orm/mysql-core";
 
 const signup = async (req: Request, res: Response) => {
     const { name, email, password, role } = req.body;
@@ -18,17 +17,16 @@ const signup = async (req: Request, res: Response) => {
             password: hashedPassword,
             role:role,
             
-        });
-
-        // Successful response
+        }).returning();
+        console.log(users);
         res.status(200).json({
             message: "User registered successfully!",
             user: { name, email, role }
         });
+
     } catch (error: any) {
         console.error("Error during signup:", error.message || error);
 
-        // Error response
         if (error.code === "23505") {
             res.status(409).json({ error: "Email already registered" });
         } else {
