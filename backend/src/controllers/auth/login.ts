@@ -35,7 +35,7 @@ const login = async (req: Request, res: Response) => {
     const token = jwt.sign(
       { id: data[0].id, role: data[0].role, email: data[0].email },
       process.env.JWT_SECRET as string || "haker ",
-      { expiresIn: "24*60*60" }
+      { expiresIn: "1d" }
     );
     return res
       .status(200)
