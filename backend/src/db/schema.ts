@@ -1,3 +1,4 @@
+import { create } from "domain";
 import {
   pgTable,
   serial,
@@ -9,6 +10,7 @@ import {
   bigint,
   boolean,
   json,
+  unique
 } from "drizzle-orm/pg-core";
 
 // Define the roles as an enum type
@@ -52,3 +54,57 @@ export const Category = pgTable("category", {
   created_at: timestamp("created_at", { withTimezone: true }).defaultNow(),
   updated_at: timestamp("updated_at", { withTimezone: true }).defaultNow(),
 });
+
+export const addToCart=pgTable("add_to_cart",{
+  id:serial("id").primaryKey(),
+  userId:integer("userId").notNull(),
+  productId:integer("productId").notNull(),
+  quantity:integer("quantity").notNull(),
+  totalPrice:integer("totalPrice").notNull(),
+  createdAt:timestamp("createdAt").notNull().defaultNow(),
+
+},(table)=>({tableUniqueId:unique().on(table.userId,table.productId)}));
+
+export const Order=pgTable("order",{
+  id:serial("id").primaryKey(),
+  userId:integer("userId").notNull(),
+  addressId:integer("addressId").notNull(),
+  totalAmount:integer("totalAmount").notNull(),
+  status:varchar("status").notNull().default("pending"),
+  paymentId:varchar("paymentId").notNull(),
+  cancelReasion:text("cancelReasion"),
+  createdAt:timestamp("createdAt").notNull().defaultNow(),
+},(table)=>({tableUniqueId:unique().on(table.userId,table.addressId,table.paymentId)}));
+
+export const OrderItems=pgTable("order_items",{
+  id:serial("id").primaryKey(),
+  orderId:integer("orderId").notNull(),
+  productId:integer("productId").notNull(),
+  quantity:integer("quantity").notNull(),
+  price:integer("price").notNull(),
+  createdAt:timestamp("createdAt").notNull().defaultNow(),
+});
+
+export const deliveryAddress=pgTable("delivery_address",{
+  id:serial("id").primaryKey(),
+  userId:integer("userId").notNull(),
+  address:varchar("address").notNull(),
+  city:varchar("city").notNull(),
+  state:varchar("state").notNull(),
+  postalCode:varchar("postalCode").notNull(),
+  country:varchar("country").notNull(),
+  phoneNumber:varchar("phoneNumber").notNull(),
+  active:boolean("isDefault").notNull().default(false),
+  createdAt:timestamp("createdAt").notNull().defaultNow(),
+});
+
+export const payment=pgTable("payment",{
+  id:serial("id").primaryKey(),
+  orderId:integer("orderId").notNull(),
+  RazorPaymentId:varchar("razorPaymentId").notNull(),
+  signature:varchar("signature").notNull(),
+  status:varchar("status").notNull(),
+  createdAt:timestamp("createdAt").notNull().defaultNow(),
+},(table)=>({tableUniqueId:unique().on(table.orderId,table.RazorPaymentId)}));
+
+
