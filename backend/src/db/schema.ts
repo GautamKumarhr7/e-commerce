@@ -88,12 +88,13 @@ export const OrderItems=pgTable("order_items",{
 export const deliveryAddress=pgTable("delivery_address",{
   id:serial("id").primaryKey(),
   userId:integer("userId").notNull(),
+  name:varchar("name").notNull(),
   address:varchar("address").notNull(),
   city:varchar("city").notNull(),
   state:varchar("state").notNull(),
-  postalCode:varchar("postalCode").notNull(),
+  postalCode:integer("postalCode").notNull(),
   country:varchar("country").notNull(),
-  phoneNumber:varchar("phoneNumber").notNull(),
+  phoneNumber:integer("phoneNumber").notNull(),
   active:boolean("isDefault").notNull().default(false),
   createdAt:timestamp("createdAt").notNull().defaultNow(),
 });
