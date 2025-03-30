@@ -2,7 +2,7 @@ import { Router } from "express";
 import singup from "../controllers/auth/singup";
 import login from "../controllers/auth/login";
 import authorization from "../middlewares/auth";
-import { addProducts,getProduct,addCatogries,getCatogries } from "../controllers";
+import { addProducts,getProduct,addCatogries,getCatogries,addItemsToCart, getCartItems} from "../controllers";
 
 const router = Router();
 
@@ -13,6 +13,9 @@ router.post("/addProducts", addProducts);
 router.get("/getProduct/:id", getProduct);
 router.post("/addCatogries", addCatogries);
 router.get("/getCatogries/:id", getCatogries);
+router.post("/addtocart",addItemsToCart);
+router.get("/getCartItems",getCartItems);
+
 
 
 
