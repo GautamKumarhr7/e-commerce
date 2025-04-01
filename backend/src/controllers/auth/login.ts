@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import { db } from "../db/connection";
-import { users } from "../db/schema";
+import { db } from "../../db/connection";
+import { Users } from "../../db/schema";
 import jwt from "jsonwebtoken";
 import { eq } from "drizzle-orm";
 import bcrypt from "bcrypt";
@@ -15,7 +15,7 @@ const login = async (req: Request, res: Response) => {
         .json({ error: "Email and password are required." });
     }
 
-    const data = await db.select().from(users).where(eq(users.email, email));
+    const data = await db.select().from(Users).where(eq(Users.email, email));
 
     if (!data[0]) {
       return res
@@ -34,7 +34,7 @@ const login = async (req: Request, res: Response) => {
 
     const token = jwt.sign(
       { id: data[0].id, role: data[0].role, email: data[0].email },
-      process.env.JWT_SECRET as string || "haker ",
+      (process.env.JWT_SECRET as string) || "haker ",
       { expiresIn: "1d" }
     );
     return res
