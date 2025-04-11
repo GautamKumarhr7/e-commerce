@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { users } from "../db/schema";
+import { Users } from "../db/schema";
 import { db } from "../db/connection";
 import jwt from "jsonwebtoken";
 import { eq } from "drizzle-orm";
@@ -18,14 +18,14 @@ const authorization = async (
     const tokenValidation = jwt.verify(
       token,
       (process.env.JWT_SECRET as string) || "haker "
-    ) as typeof users.$inferSelect;
+    ) as typeof Users.$inferSelect;
     if (!tokenValidation) {
       return res.status(404).json({ message: "acces denaid, invalid token!" });
     }
     const user = await db
       .select()
-      .from(users)
-      .where(eq(users.id, tokenValidation.id));
+      .from(Users)
+      .where(eq(Users.id, tokenValidation.id));
     if (!user.length) {
       return res.status(404).json({ message: "not a valid user token" });
     }
@@ -37,7 +37,7 @@ const authorization = async (
     return res.setHeader("authorization", refreshToken);
     next();
   } catch (error) {
-    next(error)
+    next(error);
     return res.status(500).json({ error: "internal server problem" });
   }
 };
