@@ -3,12 +3,12 @@ import { Users, Products } from "../../db/schema";
 import { db } from "../../db/connection";
 
 const addProducts = async (req: Request, res: Response, next: NextFunction) => {
-  const products = req.body.products as typeof Products.$inferSelect;
+  const products = req.body as typeof Products.$inferSelect;
   const users = res.locals.users as typeof Users.$inferSelect;
 
-  if (users.role !== "admin" && users.role !== "editor") {
-    return res.status(401).json({ message: "you are not admin " });
-  }
+  // if (users.role !== "admin" && users.role !== "editor") {
+  //   return res.status(401).json({ message: "you are not admin " });
+  // }
   try {
     const product = await db
       .insert(Products)
